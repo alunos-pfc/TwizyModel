@@ -16,6 +16,14 @@ For the original version, please visit the [original StreetDrone repository](htt
 ##### - Gazebo [ros-noetic-gazebo-ros-pkgs](http://gazebosim.org/tutorials?tut=ros_installing)  
 This model has been tested with Gazebo 11. Run `gazebo --version` to make sure you have the correct version installed.  
 
+## Docker
+
+For users who prefer not to install all the dependencies, a Docker container is available. This container has all the necessary dependencies pre-installed.
+
+To use the Docker container, please follow the instructions provided at the following link:
+
+[Docker Instructions](https://github.com/alunos-pfc/TwizyModel-Noetic/tree/master/Docker)
+
 ## Setup your workspace:
 ### A. Create a catkin workspace:
 To setup your workspace after installing ROS noetic and catkin tools, do:
