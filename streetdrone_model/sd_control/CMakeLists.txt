@@ -15,7 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 catkin_package(CATKIN_DEPENDS rospy)
 
-find_package(gazebo 7 REQUIRED)
+find_package(gazebo 11 REQUIRED)
 
 install(DIRECTORY launch/
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
@@ -27,9 +27,9 @@ install(DIRECTORY config/
         FILES_MATCHING PATTERN "*.yaml"
         )
 
-catkin_install_python(PROGRAMS
-        src/sd_teleop_keyboard.py
-        DESTINATION share/${PROJECT_NAME})
+#catkin_install_python(PROGRAMS
+#        src/sd_teleop_keyboard.py
+#        DESTINATION share/${PROJECT_NAME})
 
 include_directories(
   ${catkin_INCLUDE_DIRS}

@@ -23,7 +23,7 @@ namespace sd_control
 
     model_ = model;
     world_ = model_->GetWorld();
-    auto physicsEngine = world_->GetPhysicsEngine();
+    auto physicsEngine = world_->Physics();
     physicsEngine->SetParam("friction_model", std::string{"cone_model"});
 
     gznode_ = gazebo::transport::NodePtr(new gazebo::transport::Node());
@@ -106,10 +106,10 @@ namespace sd_control
     // Compute wheelbase, frontTrackWidth, and rearTrackWidth
     //  first compute the positions of the 4 wheel centers
     //  again assumes wheel link is child of joint and has only one collision
-    auto fl_center_pos = fl_wheel_joint_->GetChild()->GetCollision(id)->GetWorldPose().Ign().Pos();
-    auto fr_center_pos = fr_wheel_joint_->GetChild()->GetCollision(id)->GetWorldPose().Ign().Pos();
-    auto bl_center_pos = bl_wheel_joint_->GetChild()->GetCollision(id)->GetWorldPose().Ign().Pos();
-    auto br_center_pos = br_wheel_joint_->GetChild()->GetCollision(id)->GetWorldPose().Ign().Pos();
+    auto fl_center_pos = fl_wheel_joint_->GetChild()->GetCollision(id)->WorldPose().Pos();
+    auto fr_center_pos = fr_wheel_joint_->GetChild()->GetCollision(id)->WorldPose().Pos();
+    auto bl_center_pos = bl_wheel_joint_->GetChild()->GetCollision(id)->WorldPose().Pos();
+    auto br_center_pos = br_wheel_joint_->GetChild()->GetCollision(id)->WorldPose().Pos();
 
     // track widths are computed first
     auto vec3 = fl_center_pos - fr_center_pos;
@@ -141,7 +141,7 @@ namespace sd_control
   {
     std::lock_guard<std::mutex> lock{mutex_};
 
-    auto cur_time = world_->GetSimTime();
+    auto cur_time = world_->SimTime();
     auto dt = (cur_time - last_sim_time_).Double();
     if (dt < 0) {
       // TODO: reset
@@ -153,18 +153,18 @@ namespace sd_control
       return;
     }
 
-    auto fl_steering_angle = fl_wheel_steering_joint_->GetAngle(0).Radian();
-    auto fr_steering_angle = fr_wheel_steering_joint_->GetAngle(0).Radian();
+    auto fl_steering_angle = fl_wheel_steering_joint_->Position(0);
+    auto fr_steering_angle = fr_wheel_steering_joint_->Position(0);
 
     auto fl_wheel_angular_velocity = fl_wheel_joint_->GetVelocity(0);
     auto fr_wheel_angular_velocity = fr_wheel_joint_->GetVelocity(0);
     auto bl_wheel_angular_velocity = bl_wheel_joint_->GetVelocity(0);
     auto br_wheel_angular_velocity = br_wheel_joint_->GetVelocity(0);
 
-    auto chassis_linear_velocity = chassis_link_->GetWorldCoGLinearVel();
+    auto chassis_linear_velocity = chassis_link_->WorldCoGLinearVel();
 
     auto drag_force = -chassis_aero_force_gain_
-      * chassis_linear_velocity.GetSquaredLength()
+      * chassis_linear_velocity.SquaredLength()
       * chassis_linear_velocity.Normalize();
     chassis_link_->AddForce(drag_force);
 
