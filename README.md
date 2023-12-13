@@ -34,7 +34,12 @@ catkin init
 ```
 For more information, visit [create_a_workspace](http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
 
-### B. Clone this repository or copy its contents at your `~/catkin_ws/src` folder of the catkin workspace you just initialized.
+### B. Clone this repository to your catkin workspace:
+
+```bash
+cd ~/catkin_ws/src
+git clone https://github.com/alunos-pfc/TwizyModel-Noetic.git
+```
 
 ### C. Navigate to your workspace, install the dependencies and build the simulation
 ```
@@ -111,3 +116,68 @@ To launch the sd_teleop_keyboard node, run the following:
 bash ~/catkin_ws/src/TwizyModel-Noetic/streetdrone_model/sd_control/keyboardlaunch.sh 
 ```
 And follow the instructions on the terminal.
+
+
+## Vehicle Interface
+
+The StreetDrone Vehicle Interface is a ROS package that provides a bridge between the SD-TwizyModel simulation and the StreetDrone Vehicle API.
+
+### Installation
+
+### A. Clone the SD-VehicleInterface repository to your catkin workspace:
+
+```bash
+cd ~/catkin_ws/src
+git clone --single-branch -b melodic-devel https://github.com/streetdrone-home/SD-VehicleInterface.git
+```
+
+### B. Remove the msgs folder (duplicate of the can_msgs package) from the SD-VehicleInterface package:
+```bash
+rm -r ~/catkin_ws/src/SD-VehicleInterface/msgs/
+```
+
+### C. Change code in the socketcan_bridge_node.cpp file:
+
+The SD-VehicleInterface package is not compatible with ROS Noetic. To fix this, you need to change the code in the socketcan_bridge_node.cpp file.
+
+Open the file `SD-VehicleInterface/vehicle_interface/src/socketcan_bridge/socketcan_bridge_node.cpp` in a text editor of your choice.
+
+Replace the existing code in line 45:
+```cpp
+can::ThreadedSocketCANInterfaceSharedPtr driver = std::make_shared<can::ThreadedSocketCANInterface> ();
+```
+with the following code:
+```cpp
+std::shared_ptr<can::ThreadedInterface<can::SocketCANInterface>> driver = std::make_shared<can::ThreadedSocketCANInterface>();
+```
+
+Or simply run the following command:
+
+```bash
+sed -i 's/can::ThreadedSocketCANInterfaceSharedPtr/std::shared_ptr<can::ThreadedInterface<can::SocketCANInterface>>/' ~/catkin_ws/src/SD-VehicleInterface/vehicle_interface/src/socketcan_bridge/socketcan_bridge_node.cpp
+```
+
+### D. Build the SD-VehicleInterface package:
+
+```bash
+cd ~/catkin_ws
+catkin build vehicle_interface
+```
+
+### E. Launch the SD-VehicleInterface package:
+
+After building the SD-VehicleInterface package and starting the simulation, you can launch the SD-VehicleInterface package:
+
+1. Open a new terminal window.
+2. Source ros and your workspace:
+```bash
+source /opt/ros/noetic/setup.bash
+source ~/catkin_ws/devel/setup.bash
+```
+3. Run the following command:
+
+```bash
+roslaunch sd_vehicle_interface sd_vehicle_interface.launch sd_vehicle:=twizy sd_gps_imu:=none sd_simulation_mode:=true
+```
+
+For more detailed information on the StreetDrone Vehicle Interface, refer to the official documentation: [SD-VehicleInterface Documentation](https://github.com/streetdrone-home/SD-VehicleInterface)

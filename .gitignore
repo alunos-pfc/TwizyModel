@@ -36,3 +36,6 @@
 .idea/
 
 .catkin_tools/
+
+# Models folder
+models/

@@ -1,7 +1,6 @@
 # SD-TwizyModel Simulation
 
-This repository includes a Dockerfile to create a Docker image for running the 
-SD-TwizyModel on ROS Noetic.
+This repository includes a Dockerfile to create a Docker image for running the SD-TwizyModel on ROS Noetic with and without the [StreetDrone Vehicle Interface](https://github.com/streetdrone-home/SD-VehicleInterface).
 
 All credit for the simulation goes to the original StreetDrone repository: [SD-TwizyModel](https://github.com/streetdrone-home/SD-TwizyModel).
 
@@ -23,7 +22,17 @@ cd TwizyModel-Noetic/Docker
 
 ## Building the Image
 
-Build the Docker image using the following command:
+### With StreetDrone Vehicle Interface
+
+Build the Docker image with SD-VI using the following command:
+
+```bash
+docker build -t twizymodel-noetic-vi -f simulation-with-vi/Dockerfile .
+```
+
+### Without StreetDrone Vehicle Interface
+
+Build the Docker image without SD-VI using the following command:
 
 ```bash
 docker build -t twizymodel-noetic -f simulation/Dockerfile .
@@ -58,7 +67,7 @@ cd ~/catkin_ws/src/TwizyModel-Noetic/streetdrone_model
 To run the Docker image, utilize the provided run script with the following parameters:
 
 ```bash
-./run.sh <image-name> [--rm] [--no-nvidia]
+./run.bash <image-name> [--rm] [--no-nvidia]
 ```
 
 - `<image-name>`: The name you assigned to the Docker image during the build process.
@@ -110,3 +119,29 @@ bash ~/catkin_ws/src/TwizyModel-Noetic/streetdrone_model/sd_control/keyboardlaun
 ```
 
 For additional details on control configurations, refer to [README](https://github.com/alunos-pfc/TwizyModel-Noetic/blob/master/README.md).
+
+## Vehicle Interface
+
+The StreetDrone Vehicle Interface is a ROS package that provides a bridge between the SD-TwizyModel simulation and the StreetDrone Vehicle API.
+If you are using the Docker image with SD-VehicleInterface, you can launch the Vehicle Interface by:
+
+1. Opening a new terminal window.
+2. Running the following command:
+
+```bash
+docker exec -it <container-name> bash
+```
+
+3. Running the following command:
+
+```bash
+vehicle_interface
+```
+
+Which is an alias for the original command:
+
+```bash
+roslaunch sd_vehicle_interface sd_vehicle_interface.launch sd_vehicle:=twizy sd_gps_imu:=none sd_simulation_mode:=true
+```
+
+For more detailed information on the StreetDrone Vehicle Interface, refer to the official documentation: [SD-VehicleInterface Documentation](https://github.com/streetdrone-home/SD-VehicleInterface)
