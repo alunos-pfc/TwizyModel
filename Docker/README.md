@@ -83,15 +83,16 @@ If the `models` folder is present in the root directory, it will be linked to Ga
 The package includes three different world configurations built using the default Gazebo models. To launch the worlds, use the following command:
 
 ```bash
-roslaunch sd_robot sd_twizy_worlds.launch enable_rviz:=true world:=default
+roslaunch sd_robot sd_twizy_worlds.launch enable_rviz:=true world:=default gpu:=true
 ```
 
 You can customize the launch with the following arguments:
 
-| arg         | values                         | default | description                  |
-|-------------|--------------------------------|---------|------------------------------|
-| enable_rviz | {true, false}                  | true    | Launch RVIZ alongside Gazebo |
-| world       | {default, empty, park, shapes} | default | Gazebo world                 |
+| arg         | values                         | default | description                      |
+|-------------|--------------------------------|---------|----------------------------------|
+| enable_rviz | {true, false}                  | true    | Launch RVIZ alongside Gazebo     |
+| world       | {default, empty, park, shapes} | default | Gazebo world                     |
+| gpu         | {true, false}                  | false    | Enable GPU support in simulation |
 
 For more detailed information, refer to the [robot page](https://github.com/alunos-pfc/TwizyModel-Noetic/tree/master/streetdrone_model/sd_robot).
 

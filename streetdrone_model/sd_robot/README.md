@@ -11,6 +11,7 @@ To launch the worlds:
 |-------------|--------------------------------|---------|---------------------------------------------------------------------------|
 | enable_rviz | {true, false}                  | true    | Launch RVIZ alongside Gazebo (configuration: `config/sd_twizy_rviz.rviz`) |
 | world       | {default, empty, park, shapes} | default | Gazebo world                                                              |
+| gpu         | {true, false}                  | false    | Enable GPU support in simulation (set to false for CPU)                   |
 
 ##### A. Default
 A default enviroment with a vehicle only
