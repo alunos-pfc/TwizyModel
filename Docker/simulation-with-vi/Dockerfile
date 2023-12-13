@@ -7,7 +7,9 @@ RUN apt-get update && apt-get install -y \
     git \
     ros-noetic-teleop-twist-keyboard \
     ros-noetic-joy \
-    python3-catkin-tools ros-noetic-socketcan-interface \
+    ros-noetic-velodyne-simulator \
+    python3-catkin-tools \
+    ros-noetic-socketcan-interface \
     ros-noetic-can-msgs && \
     rm -rf /var/lib/apt/lists/*
 

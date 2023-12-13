@@ -25,6 +25,19 @@ To use the Docker container, please follow the instructions provided at the foll
 [Docker Instructions](https://github.com/alunos-pfc/TwizyModel-Noetic/tree/master/Docker)
 
 ## Setup your workspace:
+
+### Install required dependencies:
+```bash
+apt install \
+    ros-noetic-teleop-twist-keyboard \
+    ros-noetic-joy \
+    ros-noetic-velodyne-simulator
+```
+- `ros-noetic-teleop-twist-keyboard` is required for the keyboard control.
+- `ros-noetic-joy` is required for the joystick control.
+- `ros-noetic-velodyne-simulator` is required for the Velodyne VLP-16 LiDAR model.
+
+
 ### A. Create a catkin workspace:
 To setup your workspace after installing ROS noetic and catkin tools, do:
 ```
@@ -105,11 +118,6 @@ roslaunch sd_control sd_twizy_control_teleop.launch enable_button:=5 throttle_ax
 
 ### Keyboard
 The simulation can also be controlled by the keyboard.
-
-You will need to install the teleop_twist_keyboard package:
-```bash
-sudo apt install ros-noetic-teleop-twist-keyboard
-```
 
 To launch the sd_teleop_keyboard node, run the following:
 ```
