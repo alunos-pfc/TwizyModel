@@ -125,6 +125,14 @@ bash ~/catkin_ws/src/TwizyModel-Noetic/streetdrone_model/sd_control/keyboardlaun
 ```
 And follow the instructions on the terminal.
 
+## Recording LiDAR Data
+
+Once the simulation is running, you can record the LiDAR data by running the following command in a new terminal window:
+```bash
+rosbag record -O <Filename>.bag /points_raw
+```
+
+To stop recording, press `Ctrl+C` in the terminal window where the rosbag record command was executed.
 
 ## Vehicle Interface
 

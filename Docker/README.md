@@ -121,6 +121,24 @@ bash ~/catkin_ws/src/TwizyModel-Noetic/streetdrone_model/sd_control/keyboardlaun
 
 For additional details on control configurations, refer to [README](https://github.com/alunos-pfc/TwizyModel-Noetic/blob/master/README.md).
 
+## Recording LiDAR Data
+
+If you want to save it to your computer, create a `bags` folder in the `TwizyModel-Noetic/Docker` directory and it will be linked to the `bags` folder inside the container.
+
+If you have created the `bags` folder, navigate to it inside the container:
+
+```bash
+cd /root/bags
+```
+
+Once the simulation is running, you can record the LiDAR data by running the following command in a new terminal window:
+
+```bash
+rosbag record -O <Filename>.bag /points_raw
+```
+
+To stop recording, press `Ctrl+C` in the terminal window where the rosbag record command was executed.
+
 ## Vehicle Interface
 
 The StreetDrone Vehicle Interface is a ROS package that provides a bridge between the SD-TwizyModel simulation and the StreetDrone Vehicle API.

@@ -90,6 +90,15 @@ else
     MODELS_VOLUME=""
 fi
 
+# Check if the "bags" folder exists
+BAGS_FOLDER="${CURRENT_DIR}/bags"
+if [ -d "$BAGS_FOLDER" ]; then
+    BAGS_VOLUME="-v ${BAGS_FOLDER}:/root/bags"
+else
+    BAGS_VOLUME=""
+fi
+
+
 # Relax X server permissions so that local X connections work; this is necessary
 # when running under XWayland
 xhost + local:
@@ -103,6 +112,7 @@ docker run -it \
   -v "$XAUTH:$XAUTH" \
   -v "/tmp/.X11-unix:/tmp/.X11-unix" \
   $MODELS_VOLUME \
+  $BAGS_VOLUME \
   $DOCKER_OPTS \
   $IMG
 
