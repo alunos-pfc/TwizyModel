@@ -17,12 +17,10 @@ WORKDIR /root/catkin_ws
 RUN catkin init
 
 # Clone the SD-TwizyModel repository
-WORKDIR /root/catkin_ws/src
-RUN git clone https://github.com/alunos-pfc/TwizyModel-Noetic.git
+RUN git clone https://github.com/alunos-pfc/TwizyModel-Noetic.git /root/catkin_ws/src/TwizyModel-Noetic
 
 # Build the Catkin workspace
 RUN catkin config --extend /opt/ros/noetic
-WORKDIR /root/catkin_ws
 RUN catkin build
 
 # Source the ROS environment and the Catkin workspace in the entry point
@@ -31,5 +29,5 @@ RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc && \
     echo "source /root/catkin_ws/devel/setup.bash" >> /root/.bashrc && \
     echo "alias control='bash /root/catkin_ws/src/TwizyModel-Noetic/streetdrone_model/sd_control/keyboardlaunch.sh'" >> /root/.bashrc
 
-# Set the working directory to the home folder
+# Set the working directory to the root folder
 WORKDIR /root

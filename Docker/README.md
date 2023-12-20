@@ -62,19 +62,21 @@ cd ~/catkin_ws/src/TwizyModel-Noetic/streetdrone_model
 ./download_models.sh
 ```
 
-## Running the Image
+## Running the Container
 
-To run the Docker image, utilize the provided run script with the following parameters:
+To run the Docker container, utilize the provided run script with the following parameters:
 
 ```bash
-./run.bash <image-name> [--rm] [--no-nvidia]
+./run.sh <image-name> [--rm] [--nvidia]
 ```
 
 - `<image-name>`: The name you assigned to the Docker image during the build process.
 - `--rm`: Automatically remove the container when it exits.
-- `--no-nvidia`: Run the container without NVIDIA GPU support.
+- `--nvidia`: Run the container with NVIDIA GPU support.
 
 If the `models` folder is present in the root directory, it will be linked to Gazebo models within the container. This linking is necessary due to a bug preventing Gazebo from downloading the required models.
+
+If there is a `bags` folder in the `Docker` directory, it will be linked to the `bags` folder inside the container. This linking is necessary if you want to save the LiDAR data to your computer.
 
 # Inside Container - Simulation Setup
 
@@ -92,7 +94,7 @@ You can customize the launch with the following arguments:
 |-------------|--------------------------------|---------|----------------------------------|
 | enable_rviz | {true, false}                  | true    | Launch RVIZ alongside Gazebo     |
 | world       | {default, empty, park, shapes} | default | Gazebo world                     |
-| gpu         | {true, false}                  | false    | Enable GPU support in simulation |
+| gpu         | {true, false}                  | false   | Enable GPU support in simulation |
 
 For more detailed information, refer to the [robot page](https://github.com/alunos-pfc/TwizyModel-Noetic/tree/master/streetdrone_model/sd_robot).
 
@@ -100,7 +102,7 @@ For more detailed information, refer to the [robot page](https://github.com/alun
 
 You will need to open a new terminal window to control the robot.
 
-On a new terminal window, run the following command:
+On a new terminal window, run the following command to enter the container:
 ```bash
 docker exec -it <container-name> bash
 ```
@@ -110,20 +112,15 @@ docker exec -it <container-name> bash
 You can control the simulation using the keyboard by running:
 
 ```bash
-control
-```
-
-Which is an alias for the original command:
-
-```bash
-bash ~/catkin_ws/src/TwizyModel-Noetic/streetdrone_model/sd_control/keyboardlaunch.sh 
+cd ~/catkin_ws/src/TwizyModel-Noetic/streetdrone_model/sd_control
+bash keyboardlaunch.sh 
 ```
 
 For additional details on control configurations, refer to [README](https://github.com/alunos-pfc/TwizyModel-Noetic/blob/master/README.md).
 
 ## Recording LiDAR Data
 
-If you want to save it to your computer, create a `bags` folder in the `TwizyModel-Noetic/Docker` directory and it will be linked to the `bags` folder inside the container.
+If you want to save it to your computer, create a `bags` folder in the `TwizyModel-Noetic/Docker` directory before running the container and it will be linked to the `bags` folder inside the container.
 
 If you have created the `bags` folder, navigate to it inside the container:
 
@@ -145,22 +142,22 @@ The StreetDrone Vehicle Interface is a ROS package that provides a bridge betwee
 If you are using the Docker image with SD-VehicleInterface, you can launch the Vehicle Interface by:
 
 1. Opening a new terminal window.
-2. Running the following command:
+2. Running the following command to enter the container:
 
 ```bash
 docker exec -it <container-name> bash
 ```
 
-3. Running the following command:
-
-```bash
-vehicle_interface
-```
-
-Which is an alias for the original command:
+3. Running the following command to launch the Vehicle Interface:
 
 ```bash
 roslaunch sd_vehicle_interface sd_vehicle_interface.launch sd_vehicle:=twizy sd_gps_imu:=none sd_simulation_mode:=true
 ```
 
 For more detailed information on the StreetDrone Vehicle Interface, refer to the official documentation: [SD-VehicleInterface Documentation](https://github.com/streetdrone-home/SD-VehicleInterface)
+
+## Customizations
+
+- Aliases are added to facilitate common commands:
+    - `control`: launches the keyboard control.
+    - `vehicle_interface`: launches the StreetDrone Vehicle Interface.
