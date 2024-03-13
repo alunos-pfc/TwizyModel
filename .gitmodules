@@ -1,0 +1,3 @@
+[submodule "SD-VehicleInterface"]
+	path = SD-VehicleInterface
+	url = https://github.com/Monash-Connected-Autonomous-Vehicle/SD-VehicleInterface.git
