@@ -1,55 +1,58 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(sd_control)
 
-set (CMAKE_CXX_STANDARD 11)
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
 
-find_package(catkin REQUIRED COMPONENTS
-  gazebo_ros
-  roscpp
-  tf
-  nav_msgs
-  sd_msgs
-  rospy
-
-)
-
-catkin_package(CATKIN_DEPENDS rospy)
-
-find_package(gazebo 11 REQUIRED)
-
-install(DIRECTORY launch/
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
-        FILES_MATCHING PATTERN "*.launch" PATTERN "*.machine" PATTERN "*.yaml" PATTERN "*.urdf"
-        )
-
-install(DIRECTORY config/
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
-        FILES_MATCHING PATTERN "*.yaml"
-        )
-
-#catkin_install_python(PROGRAMS
-#        src/sd_teleop_keyboard.py
-#        DESTINATION share/${PROJECT_NAME})
+find_package(ament_cmake REQUIRED)
+find_package(gazebo_ros REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(sd_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 include_directories(
-  ${catkin_INCLUDE_DIRS}
-  ${GAZEBO_INCLUDE_DIRS}
-  include/
-  )
-
-add_library(SdControlPlugin SHARED src/sd_control_plugin.cpp)
-target_link_libraries(SdControlPlugin ${GAZEBO_LIBRARIES})
-add_dependencies(SdControlPlugin ${catkin_EXPORTED_TARGETS})
-
-add_executable(sd_teleop_joy src/sd_teleop_joy.cpp src/sd_teleop_joy_node.cpp)
-add_dependencies(sd_teleop_joy ${catkin_EXPORTED_TARGETS})
-
-target_link_libraries(sd_teleop_joy
-  ${catkin_LIBRARIES})
-
-install(TARGETS SdControlPlugin sd_teleop_joy
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  include
+  ${gazebo_INCLUDE_DIRS}
 )
 
+# Add Gazebo executable
+add_library(SdControlPlugin SHARED
+  src/sd_control_plugin.cpp
+)
+ament_target_dependencies(SdControlPlugin
+  gazebo_ros
+  rclcpp
+  tf2_ros
+  nav_msgs
+  sd_msgs
+  geometry_msgs
+)
+
+# Install Gazebo plugin
+install(TARGETS SdControlPlugin
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+# Install launch files
+install(DIRECTORY launch/
+  DESTINATION share/${PROJECT_NAME}/launch
+)
+
+# Install config files
+install(DIRECTORY config/
+  DESTINATION share/${PROJECT_NAME}/config
+)
+
+# Install Python executables
+install(PROGRAMS
+  src/sd_teleop_keyboard.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+ament_package()
